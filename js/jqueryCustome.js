@@ -17070,7 +17070,7 @@ $(function() {
         try {
             console.log('Starting displayCartItems function');
             
-            // Get cart items from localStorage
+            /* // Get cart items from localStorage
             const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
             console.log('Cart items from localStorage:', cartItems);
             
@@ -17160,7 +17160,7 @@ $(function() {
             $('.d-flex.justify-content-between .price').text(`₹${subtotal.toFixed(2)}`);
 
             // Reinitialize jcf on the new number inputs
-            jcf.replaceAll();
+            jcf.replaceAll(); */
             
         } catch (error) {
             console.error('Error in displayCartItems:', error);
