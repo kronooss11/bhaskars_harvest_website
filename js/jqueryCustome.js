@@ -1,3 +1,5 @@
+console.log('JavaScript file loaded');
+
 $(document).ready(function() {
 
   "use strict"; 
