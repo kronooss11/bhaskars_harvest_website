@@ -17064,6 +17064,7 @@ $(function() {
     }
 
     // Add this function to handle cart display
+	console.log('Axios:', axios);
     async function displayCartItems() {
 	    console.log('async function success');
         try {
