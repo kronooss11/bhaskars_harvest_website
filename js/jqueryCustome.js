@@ -17063,6 +17063,7 @@ $(function() {
 
     // Add this function to handle cart display
     async function displayCartItems() {
+	    console.log('async function success');
         try {
             console.log('Starting displayCartItems function');
             
