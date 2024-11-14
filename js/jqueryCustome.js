@@ -17065,49 +17065,43 @@ $(function() {
 
     // Add this function to handle cart display
 	console.log('Axios:', axios);
-    async function displayCartItems() {
-	    console.log('async function success');
-        try {
-            console.log('Starting displayCartItems function');
-            
-            // Get cart items from localStorage
-            const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-            console.log('Cart items from localStorage:', cartItems);
-            
-            const tbody = $('.cartTable tbody');
-            console.log('Found tbody element:', tbody.length > 0);
-            
-            // Clear existing items
-            tbody.empty();
-            console.log('Cleared existing items from tbody');
-            
-            if (cartItems.length === 0) {
-                console.log('Cart is empty, displaying empty message');
-                tbody.html('<tr><td colspan="4" class="text-center">Your cart is empty</td></tr>');
-                return;
-            }
+    function displayCartItems() {
+    console.log('displayCartItems function');
+    
+    try {
+        console.log('Starting displayCartItems function');
+        
+        // Get cart items from localStorage
+        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        console.log('Cart items from localStorage:', cartItems);
+        
+        const tbody = $('.cartTable tbody');
+        console.log('Found tbody element:', tbody.length > 0);  
+        
+        if (cartItems.length === 0) {
+            console.log('Cart is empty, displaying empty message');
+            tbody.html('<tr><td colspan="4" class="text-center">Your cart is empty</td></tr>');
+            return;
+        }
 
-            // Fetch products directly from Airtable
-            const baseId = 'appjWCKwu9qEY7dF7';
-            const apiKey = 'patdjwWdMjF4YmCCy.e633e8c4f47b30c521a9a940edac22b949622695c60baf2f65d6971556e065a3';
-            const tableName = 'products';
-            
-            console.log('Fetching products from Airtable...');
-            const response = await axios.get(
-                `https://api.airtable.com/v0/${baseId}/${tableName}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${apiKey}`
-                    }
-                }
-            );
-            
+        // Fetch products directly from Airtable
+        const baseId = 'appjWCKwu9qEY7dF7';
+        const apiKey = 'patdjwWdMjF4YmCCy.e633e8c4f47b30c521a9a940edac22b949622695c60baf2f65d6971556e065a3';
+        const tableName = 'products';
+        
+        console.log('Fetching products from Airtable...');
+        axios.get(`https://api.airtable.com/v0/${baseId}/${tableName}`, {
+            headers: {
+                Authorization: `Bearer ${apiKey}`
+            }
+        })
+        .then(response => {
             console.log('Airtable response:', response.data);
             const products = response.data.records;
             console.log('Products fetched:', products.length);
-            
+
             let subtotal = 0;
-            
+
             // Display each cart item
             cartItems.forEach(cartItem => {
                 console.log('Processing cart item:', cartItem);
@@ -17155,22 +17149,28 @@ $(function() {
                     tbody.append(itemHtml);
                 }
             });
-            
+
             // Update the existing subtotal instead of adding a new row
             $('.d-flex.justify-content-between .price').text(`₹${subtotal.toFixed(2)}`);
 
             // Reinitialize jcf on the new number inputs
             jcf.replaceAll();
-            
-        } catch (error) {
+        })
+        .catch(error => {
             console.error('Error in displayCartItems:', error);
             console.error('Error details:', {
                 message: error.message,
                 stack: error.stack
             });
             $('.cartTable tbody').html('<tr><td colspan="4" class="text-center">Error loading cart items</td></tr>');
-        }
+        });
+
+    } catch (error) {
+        console.error('Unexpected error in displayCartItems:', error);
+        $('.cartTable tbody').html('<tr><td colspan="4" class="text-center">Error loading cart items</td></tr>');
     }
+}
+
 
     // Call displayCartItems when the cart page loads
     if (window.location.pathname.includes('cart-page.html')) {
